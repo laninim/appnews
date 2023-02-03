@@ -1,6 +1,9 @@
 package com.example.appnews.fragments
 
+import android.annotation.SuppressLint
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -17,6 +20,7 @@ import com.example.appnews.adapter.OnArticleClick
 import com.example.appnews.databinding.FragmentNewsBinding
 import com.example.appnews.network.networkmodel.Article
 import com.example.appnews.network.networkmodel.NetworkService
+import com.example.appnews.network.networkmodel.NewsResponse
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -30,8 +34,21 @@ class NewsFragment : Fragment() {
     private var _binding : FragmentNewsBinding? = null
     val binding get() = _binding!!
 
+    private lateinit var adapter : ArticleAdapter
+
+    private lateinit var response : NewsResponse
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+    }
+
+    val listener =  object : OnArticleClick {
+        override fun onClickArticle(article: Article) {
+            Log.d("Article", "Article: $article")
+            val action = NewsFragmentDirections.actionNewsFragmentToArticleDetails(article)
+            findNavController().navigate(action)
+        }
 
     }
 
@@ -47,21 +64,17 @@ class NewsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        addSearchButtonListener()
 
         val networkcall = GlobalScope.launch(Dispatchers.IO) {
             try {
-                val response = NetworkService.loadInstance().getArticleByKeyWord("bitcoin")
+                response = NetworkService.loadInstance().getArticleByKeyWord("bitcoin")
                 response?.let {
                     withContext(Dispatchers.Main){
-                        binding.newslist.adapter = ArticleAdapter(response.articles, object : OnArticleClick {
-                            override fun onClickArticle(article: Article) {
-                                Log.d("Article", "Article: $article")
-                                val action = NewsFragmentDirections.actionNewsFragmentToArticleDetails(article)
-                                findNavController().navigate(action)
-                            }
-
-                        })
+                        adapter = ArticleAdapter(response.articles, listener)
+                        binding.newslist.adapter = adapter
                         binding.newslist.layoutManager = LinearLayoutManager(requireContext())
+
                     }
                 }
             }catch (e : java.lang.Exception){
@@ -71,6 +84,51 @@ class NewsFragment : Fragment() {
                 }
             }
         }
+        networkcall.invokeOnCompletion {
+            addTextListener(response.articles)
+            Log.d("NewsFragment","Invoke listener")
+        }
+    }
+
+    private fun addSearchButtonListener(){
+        binding.searchButton.setOnClickListener {
+            showSearchBar()
+        }
+    }
+
+    private fun showSearchBar() {
+        if(binding.searchBar.visibility == View.INVISIBLE){
+            binding.searchBar.visibility = View.VISIBLE
+        }else{
+            binding.searchBar.visibility = View.INVISIBLE
+        }
+    }
+
+    private fun addTextListener(listArticle : List<Article>){
+
+        binding.searchBar.addTextChangedListener(object: TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+
+            }
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+
+            }
+
+
+            override fun afterTextChanged(s: Editable?) {
+               val newList = listArticle.filter {
+                   it.title.toString().contains(s.toString())
+               }
+                adapter = ArticleAdapter(newList, listener)
+                binding.newslist.adapter = adapter
+                adapter.notifyDataSetChanged()
+                Log.d("Newsfragment","Invoke text listener")
+
+
+            }
+
+        })
     }
 
 

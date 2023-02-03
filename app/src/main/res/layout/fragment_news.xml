@@ -27,10 +27,11 @@
             android:textColorHighlight="@color/white"
             android:textColorHint="@color/white"
             android:textColorLink="@color/white"
-            android:textSize="20sp" />
+            android:textSize="20sp"
+            android:visibility="invisible" />
 
         <ImageView
-            android:id="@+id/imageView2"
+            android:id="@+id/search_button"
             android:layout_width="30dp"
             android:layout_height="30dp"
             android:layout_marginStart="8dp"
