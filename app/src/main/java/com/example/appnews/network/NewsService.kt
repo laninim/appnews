@@ -5,11 +5,11 @@ import retrofit2.http.*
 
 interface NewsService {
 
-    @Headers("X-Api-Key:Insert your api key")
+    @Headers("X-Api-Key:insert api key")
     @GET("everything")
     suspend fun getArticleByKeyWord(@Query("q") searchkey : String)  : NewsResponse
 
-    @Headers("X-Api-Key:Insert your api key")
+    @Headers("X-Api-Key:insert api key")
     @GET("everything?")
     suspend fun getArticleByKeyWordAndPopularity(@Query("q") keyword : String, @Query("sortBy") relevancy : String) : NewsResponse
 
