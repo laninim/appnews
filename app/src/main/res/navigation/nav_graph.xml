@@ -9,5 +9,21 @@
         android:id="@+id/newsFragment"
         android:name="com.example.appnews.fragments.NewsFragment"
         android:label="fragment_news"
-        tools:layout="@layout/fragment_news" />
+        tools:layout="@layout/fragment_news" >
+        <action
+            android:id="@+id/action_newsFragment_to_articleDetails"
+            app:destination="@id/articleDetails" />
+    </fragment>
+    <fragment
+        android:id="@+id/articleDetails"
+        android:name="com.example.appnews.fragments.ArticleDetails"
+        android:label="fragment_article_details"
+        tools:layout="@layout/fragment_article_details" >
+        <action
+            android:id="@+id/action_articleDetails_to_newsFragment"
+            app:destination="@id/newsFragment" />
+        <argument
+            android:name="article"
+            app:argType="com.example.appnews.network.networkmodel.Article" />
+    </fragment>
 </navigation>

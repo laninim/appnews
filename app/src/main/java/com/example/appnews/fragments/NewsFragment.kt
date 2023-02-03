@@ -7,10 +7,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.core.os.bundleOf
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.appnews.R
 import com.example.appnews.adapter.ArticleAdapter
+import com.example.appnews.adapter.OnArticleClick
 import com.example.appnews.databinding.FragmentNewsBinding
 import com.example.appnews.network.networkmodel.Article
 import com.example.appnews.network.networkmodel.NetworkService
@@ -50,7 +53,14 @@ class NewsFragment : Fragment() {
                 val response = NetworkService.loadInstance().getArticleByKeyWord("bitcoin")
                 response?.let {
                     withContext(Dispatchers.Main){
-                        binding.newslist.adapter = ArticleAdapter(response.articles)
+                        binding.newslist.adapter = ArticleAdapter(response.articles, object : OnArticleClick {
+                            override fun onClickArticle(article: Article) {
+                                Log.d("Article", "Article: $article")
+                                val action = NewsFragmentDirections.actionNewsFragmentToArticleDetails(article)
+                                findNavController().navigate(action)
+                            }
+
+                        })
                         binding.newslist.layoutManager = LinearLayoutManager(requireContext())
                     }
                 }
