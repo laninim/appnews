@@ -10,13 +10,17 @@ import androidx.room.Room
 import com.example.appnews.R
 import com.example.appnews.database.entity.Database
 import com.example.appnews.database.entity.Topic
+import com.example.appnews.databinding.FragmentTopicBinding
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 
 class TopicFragment : Fragment() {
 
+    var _binding : FragmentTopicBinding? = null
+    val binding get() = _binding!!
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -27,8 +31,8 @@ class TopicFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_topic, container, false)
+        _binding = FragmentTopicBinding.inflate(layoutInflater)
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -36,21 +40,18 @@ class TopicFragment : Fragment() {
         val db = Room.databaseBuilder(requireContext(), Database::class.java, "newsapp").build()
         Log.d("Database","database: $db")
 
-        //insert topic
-        val databaseInsertJob = GlobalScope.launch(Dispatchers.IO) {
-            db.topicDao().insertTopic(Topic(topicName = "calcio", languagePref = "it"))
-            Log.d("Database","Insert query spero")
-        }
 
-        databaseInsertJob.invokeOnCompletion {
-           val dbRetrieveTopic = GlobalScope.launch(Dispatchers.IO) {
+        val dbRetrieveTopic = GlobalScope.launch(Dispatchers.IO) {
                val result = db.topicDao().getAll()
                if(result.isNotEmpty()){
                    Log.d("Database", "Topic: $result")
+                   withContext(Dispatchers.Main){
+
+                   }
                }
            }
         }
-    }
+
 
 
 }
