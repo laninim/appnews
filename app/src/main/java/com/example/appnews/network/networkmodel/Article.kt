@@ -15,5 +15,5 @@ data class Article(
     val title: String,
     val url: String,
     val urlToImage: String,
-    val favorite : Boolean = false
+    var favorite : Boolean = false
 ) : Parcelable

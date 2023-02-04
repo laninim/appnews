@@ -71,7 +71,7 @@ class NewsFragment : Fragment() {
                 response = NetworkService.loadInstance().getArticleByKeyWord("bitcoin")
                 response?.let {
                     withContext(Dispatchers.Main){
-                        adapter = ArticleAdapter(response.articles, listener)
+                        adapter = ArticleAdapter(response.articles, listener, requireContext())
                         binding.newslist.adapter = adapter
                         binding.newslist.layoutManager = LinearLayoutManager(requireContext())
 
@@ -120,7 +120,7 @@ class NewsFragment : Fragment() {
                val newList = listArticle.filter {
                    it.title.toString().contains(s.toString())
                }
-                adapter = ArticleAdapter(newList, listener)
+                adapter = ArticleAdapter(newList, listener, requireContext())
                 binding.newslist.adapter = adapter
                 adapter.notifyDataSetChanged()
                 Log.d("Newsfragment","Invoke text listener")
