@@ -8,4 +8,5 @@ import androidx.room.PrimaryKey
 data class Topic(
     @PrimaryKey(autoGenerate = true) val uid: Int=0,
     @ColumnInfo("topic_name") val topicName : String,
-    @ColumnInfo("language_pref") val languagePref : String)
+    @ColumnInfo("language_pref") val languagePref : String,
+    @ColumnInfo("active_topic") val activeTopic : Boolean)

@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.room.Room
+import androidx.room.migration.Migration
 import com.example.appnews.R
 import com.example.appnews.database.entity.Database
 import com.example.appnews.database.entity.Topic
@@ -46,7 +47,11 @@ class TopicFragment : Fragment() {
                if(result.isNotEmpty()){
                    Log.d("Database", "Topic: $result")
                    withContext(Dispatchers.Main){
-
+                        binding.topicdisplay.text = result.first().topicName.toString()
+                   }
+               }else{
+                   withContext(Dispatchers.Main){
+                       binding.topicdisplay.text = "Nessun topic"
                    }
                }
            }
