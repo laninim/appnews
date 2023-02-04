@@ -2,9 +2,11 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
+        android:id="@+id/newsFragment"
         android:icon="@drawable/ic_baseline_newspaper_24"
         android:title="News" />
     <item
+        android:id="@+id/topicFragment"
         android:icon="@drawable/ic_baseline_topic_24"
         android:title="Topic" />
 </menu>
