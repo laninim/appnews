@@ -34,7 +34,7 @@
     </fragment>
     <fragment
         android:id="@+id/topicFragment"
-        android:name="com.example.appnews.fragments.TopicFragment"
+        android:name="com.example.appnews.fragments.FavoritesFragment"
         android:label="fragment_topic"
         tools:layout="@layout/fragment_topic" >
         <action
