@@ -16,8 +16,11 @@
         app:navGraph="@navigation/nav_graph" />
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-        app:menu="@menu/bottom_menu"/>
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/black"
+        android:foregroundTint="#FEFAFA"
+        app:itemTextColor="@color/white"
+        app:menu="@menu/bottom_menu" />
 
 </LinearLayout>
