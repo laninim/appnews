@@ -43,15 +43,17 @@ class ArticlesViewHolder(val view : View) : ViewHolder(view) {
 
     private fun addToPreferite(article: Article, context:Context){
         starButton.setOnClickListener {
-            article.favorite = true
-            starButton.setImageResource(R.drawable.ic_baseline_star_24)
-            val addPreferiteJob = GlobalScope.launch(Dispatchers.IO) {
-                savePreferite(article, context)
-                withContext(Dispatchers.Main){
-                    Toast.makeText(context,"Add to favorites",Toast.LENGTH_SHORT).show()
+            if (!article.favorite) {
+                article.favorite = true
+                starButton.setImageResource(R.drawable.ic_baseline_star_24)
+                val addPreferiteJob = GlobalScope.launch(Dispatchers.IO) {
+                    savePreferite(article, context)
+                    withContext(Dispatchers.Main) {
+                        Toast.makeText(context, "Add to favorites", Toast.LENGTH_SHORT).show()
+                    }
                 }
-            }
 
+            }
         }
     }
 

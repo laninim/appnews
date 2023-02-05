@@ -6,8 +6,10 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.room.Room
+import com.example.appnews.R
 import com.example.appnews.adapter.ArticleAdapter
 import com.example.appnews.adapter.OnArticleClick
 import com.example.appnews.database.entity.Database
@@ -59,7 +61,8 @@ class FavoritesFragment : Fragment() {
                                 db.topicDao().deleteTopic(article)
                                 Log.d("Database","Database: $article remove from preferite")
                                 withContext(Dispatchers.Main){
-
+                                    binding.favoriteList.adapter?.notifyItemRemoved(favoriteArticleList.indexOf(article))
+                                    findNavController().navigate(R.id.action_topicFragment_to_newsFragment)
                                 }
                             }
                         }
