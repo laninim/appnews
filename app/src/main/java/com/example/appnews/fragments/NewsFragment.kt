@@ -38,6 +38,8 @@ class NewsFragment : Fragment() {
 
     private lateinit var response : NewsResponse
 
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
