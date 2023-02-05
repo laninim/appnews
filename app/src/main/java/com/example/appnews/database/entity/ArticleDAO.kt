@@ -1,18 +1,16 @@
 package com.example.appnews.database.entity
 
-import androidx.room.Dao
-import androidx.room.Delete
-import androidx.room.Insert
-import androidx.room.Query
+import androidx.room.*
 import com.example.appnews.network.networkmodel.Article
 
 @Dao
-interface TopicDAO {
+interface ArticleDAO {
 
     @Query("SELECT * FROM article")
     suspend fun getAll() : List<Article>
 
-    @Insert
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertTopic(vararg topics : Article)
 
     @Delete
