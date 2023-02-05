@@ -38,6 +38,7 @@ class NewsFragment : Fragment() {
 
     private lateinit var response : NewsResponse
 
+    private var currentTopic = "fc inter"
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -70,7 +71,7 @@ class NewsFragment : Fragment() {
 
         val networkcall = GlobalScope.launch(Dispatchers.IO) {
             try {
-                response = NetworkService.loadInstance().getArticleByKeyWord("bitcoin")
+                response = NetworkService.loadInstance().getArticleByKeyWord(currentTopic)
                 response?.let {
                     withContext(Dispatchers.Main){
                         adapter = ArticleAdapter(response.articles, listener, requireContext())
