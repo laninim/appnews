@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.room.Room
 import com.example.appnews.R
 import com.example.appnews.adapter.ArticleAdapter
+import com.example.appnews.adapter.FavoritesAdapter
 import com.example.appnews.adapter.OnArticleClick
 import com.example.appnews.database.entity.Database
 import com.example.appnews.databinding.FragmentFavoritesBinding
@@ -26,6 +27,16 @@ class FavoritesFragment : Fragment() {
     var _binding : FragmentFavoritesBinding? = null
     val binding get() = _binding!!
     var favoriteArticleList : List<Article> = mutableListOf()
+
+    val listener =  object : OnArticleClick {
+        override fun onClickArticle(article: Article) {
+            Log.d("Article", "Article: $article")
+            val action = FavoritesFragmentDirections.actionTopicFragmentToArticleDetails(article)
+            findNavController().navigate(action)
+        }
+
+    }
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -55,19 +66,7 @@ class FavoritesFragment : Fragment() {
             favoriteArticleList = db.topicDao().getAll()
             if(favoriteArticleList.isNotEmpty()){
                 withContext(Dispatchers.Main){
-                    binding.favoriteList.adapter = ArticleAdapter(favoriteArticleList,object : OnArticleClick{
-                        override fun onClickArticle(article: Article) {
-                            GlobalScope.launch(Dispatchers.IO) {
-                                db.topicDao().deleteTopic(article)
-                                Log.d("Database","Database: $article remove from preferite")
-                                withContext(Dispatchers.Main){
-                                    binding.favoriteList.adapter?.notifyItemRemoved(favoriteArticleList.indexOf(article))
-                                    findNavController().navigate(R.id.action_topicFragment_to_newsFragment)
-                                }
-                            }
-                        }
-
-                    },requireContext())
+                    binding.favoriteList.adapter = FavoritesAdapter(favoriteArticleList,listener,requireContext())
                     binding.favoriteList.layoutManager = LinearLayoutManager(requireContext())
                 }
             }
