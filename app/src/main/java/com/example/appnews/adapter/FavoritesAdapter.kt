@@ -17,7 +17,7 @@ class FavoritesAdapter(val articles : List<Article>, val onArticleClick: OnArtic
         }
 
         override fun onBindViewHolder(holder: FavoritesViewHolder, position: Int) {
-            holder.bindArticle(articles[position], onArticleClick, context)
+            holder.bindArticle(articles[position], onArticleClick, context, this@FavoritesAdapter, position)
         }
 
         override fun getItemCount(): Int {

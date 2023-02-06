@@ -6,11 +6,14 @@ import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
+import androidx.core.os.persistableBundleOf
+import androidx.navigation.Navigation
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import androidx.room.Room
 import coil.load
 import com.example.appnews.R
+import com.example.appnews.adapter.FavoritesAdapter
 import com.example.appnews.adapter.OnArticleClick
 import com.example.appnews.database.entity.Database
 import com.example.appnews.network.networkmodel.Article
@@ -27,7 +30,7 @@ class FavoritesViewHolder(val view : View) : RecyclerView.ViewHolder(view) {
     val imagearticle = view.findViewById<ImageView>(R.id.article_image)
     val starButton = view.findViewById<ImageView>(R.id.starImageView)
 
-    fun bindArticle(article : Article, listener : OnArticleClick, context: Context){
+    fun bindArticle(article : Article, listener : OnArticleClick, context: Context, favoritesAdapter: FavoritesAdapter, position: Int){
         titleView.text = article.title
         descriptionView.text = article.content
         dataView.text = article.publishedAt
@@ -42,6 +45,9 @@ class FavoritesViewHolder(val view : View) : RecyclerView.ViewHolder(view) {
                     context, Database::class.java, "favorites"
                 ).build()
                 db.topicDao().deleteTopic(article)
+                withContext(Dispatchers.Main){
+                    Navigation.findNavController(view).navigate(R.id.action_topicFragment_to_newsFragment)
+                }
                 Log.d("FavoritesViewholder","Remove element")
             }
         }
